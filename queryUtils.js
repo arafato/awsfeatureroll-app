@@ -2,6 +2,13 @@ var moment = require('moment');
 
 var categories = ["compute", "storagecdn", "database", "networking", "admin-sec", "deployment", "analytics", "appservice", "mobile", "enterprise", "other"];
 
+function getByKeyword(connection, queryParams, cb) {
+    
+    var params = { startdate: undefined, enddate: undefined, category: undefined };
+    sanitizeParams(params, queryParams);
+    
+}
+
 function getFeatures(connection, queryParams, cb) {
 
     var params = { startdate: undefined, enddate: undefined, category: undefined };
@@ -75,7 +82,10 @@ function buildQueryString(startdate, enddate, category) {
 	categoryClause = categoryClause + " and ";
     }
 
-    var finalClause = "select * from features where " +  categoryClause + timeClause + " order by category";
+    var where = (categoryClause === "" && timeClause === "") ? "" : "where "; 
+    
+
+    var finalClause = "select * from features " + where + categoryClause + timeClause + " order by category";
 
     return finalClause;
 }
