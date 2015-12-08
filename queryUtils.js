@@ -106,7 +106,7 @@ function buildQueryString(startdate, enddate, category, keyword) {
     
     var where = (categoryClause === "" && timeClause === "" && matchClause === "") ? "" : "where "; 
         
-    var finalClause = "select * from features " + where + categoryClause + timeClause + matchClause + " order by category, unixtimestamp desc";
+    var finalClause = "select * from features " + where + categoryClause + timeClause + matchClause + " order by unixtimestamp desc";
     console.log(finalClause);
     return finalClause;
 }
