@@ -95,9 +95,13 @@ function buildQueryString(startdate, enddate, category, keyword) {
 	categoryClause = categoryClause + " and ";
     }
 
-    var matchClause = (keyword !== undefined) ? "title like '%" + keyword + "%' " : "";
-    if (categoryClause !== "" || timeClause !== "") {
-        matchClause = " and " + matchClause;
+    var matchClause = "";
+    if (keyword !== undefined) {
+        var matchClause = "title like '%" + keyword + "%' "; 
+    
+        if (categoryClause !== "" || timeClause !== "") {
+            matchClause = " and " + matchClause;
+        }
     }
     
     var where = (categoryClause === "" && timeClause === "" && matchClause === "") ? "" : "where "; 
