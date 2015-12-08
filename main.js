@@ -155,4 +155,38 @@ app.get('/api/feature', function(req, res) {
   connection.end();
 });
 
+/* If no time(-range) parameter is given, all stored features ever released are returned.
+*
+* Query parameters:
+*
+* cat (optional) - compute | storagecdn | database | networking | admin-sec | deployment |
+*       analytics | appservice | mobile | enterprise | other
+*
+* startdate (optional) - YYYY-MM-DD
+* if without dateend, all matching items until current date are returned
+*
+* enddate (optional) - YYYY-MM-DD
+* if without datestart, all matching items until earliest date are returned
+*
+* q (required) - YOUR-KEYWORD
+*/
+app.get('/api/keyword', function(req, res) {
+  
+  var connection = mysql.createConnection({
+    host     : config.dbhost,
+    user     : config.dbuser,
+    password : config.dbpwd,
+    database : config.database,
+    port: 3306
+  });
+
+  connection.connect();
+
+  queryUtils.getByKeyword(connection, req.query, function(result) {
+    res.json(result);
+  });
+
+  connection.end();
+});
+
 module.exports = app;

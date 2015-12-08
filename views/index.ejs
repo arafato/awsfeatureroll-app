@@ -38,6 +38,9 @@
 	<p>
 	  <code>$ wget &ldquo;awsfeatureroll.elasticbeanstalk.com/api/slides?startdate=2015-06-01&enddate=2015-07-01</code>
 	</p>
+  <p>
+	  <code>$ wget &ldquo;awsfeatureroll.elasticbeanstalk.com/api/keyword?q=ec2</code>
+	</p>
       </div>
     </div>
 
@@ -83,9 +86,26 @@
       <br>
       <b>twitter (optional)</b> your Twitter handle (without @)
       default: AWS_Aktuell
-
+      
+      <h2>GET api/keyword</h2>
+      <p>
+	<em>This will return a JSON representation of all features announcements that matched they keyword. </em>
+      </p>
+      <h3>Query parameters:</h3>
+      <b>q (required)</b> YOUR-KEYWORD
+      <br>
+      <b>cat (optional)</b> - compute | storagecdn | database | networking | admin-sec | deployment | analytics | appservice | mobile | enterprise | other
+      <br>
+      <b>startdate (mandatory)</b> - YYYY-MM-DD
+      <br>
+      <b>enddate (mandatory)</b> - YYYY-MM-DD
+      <br>
+      
       
       <h2>Version History</h2>
+      <p>
+	- Dec 8th: Added Keyword search
+      </p>
       <p>
 	- July 9th: Added automatic slide generation feature (revealjs)
       </p>

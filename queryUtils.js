@@ -4,9 +4,22 @@ var categories = ["compute", "storagecdn", "database", "networking", "admin-sec"
 
 function getByKeyword(connection, queryParams, cb) {
     
+    if (queryParams.q === undefined) {
+        throw "Missing keyword parameter. Use q=YOUR-KEYWORD"
+    }
+    
     var params = { startdate: undefined, enddate: undefined, category: undefined };
     sanitizeParams(params, queryParams);
+    var queryString = buildQueryString(params.startdate, params.enddate, params.category, queryParams.q);
     
+    connection.query(queryString, function(err, result) {
+	if(err) {
+	    console.log(err);
+	}
+	else if (result) {
+	    cb(result);
+	}
+    });
 }
 
 function getFeatures(connection, queryParams, cb) {
@@ -54,7 +67,7 @@ function sanitizeParams(params, queryParams) {
     }
 }
 
-function buildQueryString(startdate, enddate, category) {
+function buildQueryString(startdate, enddate, category, keyword) {
 
     var timeClause;
     if (startdate !== undefined && enddate !== undefined) {
@@ -82,11 +95,15 @@ function buildQueryString(startdate, enddate, category) {
 	categoryClause = categoryClause + " and ";
     }
 
-    var where = (categoryClause === "" && timeClause === "") ? "" : "where "; 
+    var matchClause = (keyword !== undefined) ? "title like '%" + keyword + "%' " : "";
+    if (categoryClause !== "" || timeClause !== "") {
+        matchClause = " and " + matchClause;
+    }
     
-
-    var finalClause = "select * from features " + where + categoryClause + timeClause + " order by category";
-
+    var where = (categoryClause === "" && timeClause === "" && matchClause === "") ? "" : "where "; 
+        
+    var finalClause = "select * from features " + where + categoryClause + timeClause + matchClause + " order by category, unixtimestamp desc";
+    console.log(finalClause);
     return finalClause;
 }
 
@@ -119,5 +136,6 @@ function mapCategoryName(cat) {
 
 module.exports = {
 
-    getFeatures: getFeatures
+    getFeatures: getFeatures,
+    getByKeyword: getByKeyword
 };
